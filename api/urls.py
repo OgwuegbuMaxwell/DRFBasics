@@ -1,6 +1,13 @@
 from django.urls import include, path
 from . import views
 
+# using viewset and modelviewset
+from rest_framework.routers import DefaultRouter
+router = DefaultRouter()
+router.register('customers', views.CustomerViewset, basename='customer')
+router.register('books', views.BookViewset, basename='book')
+
+# URL patterns
 urlpatterns = [
     path('students/', views.studentsView),
     path('student/<int:pk>/', views.studentDataView),
@@ -13,6 +20,11 @@ urlpatterns = [
     
     path('sales/', views.Sales.as_view()),
     path('sales/<int:pk>/', views.SaleDetail.as_view()),
+    
+    # using viewset
+    path('', include(router.urls))
+    
+    
 ]
 
 

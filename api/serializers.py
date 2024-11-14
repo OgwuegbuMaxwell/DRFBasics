@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from books.models import Book
+from customers.models import Customer
 from products.models import Product
 from sales.models import Sale
 from students.models import Student
@@ -26,4 +28,15 @@ class ProductSerializer(serializers.ModelSerializer):
 class SaleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sale
+        fields = "__all__"
+
+
+class CustomerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = "__all__"
+        
+class BookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book
         fields = "__all__"

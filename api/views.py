@@ -1,17 +1,19 @@
 from typing import List
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
+from books.models import Book
+from customers.models import Customer
 from employees.models import Employee
 from products.models import Product
 from sales.models import Sale
 from students.models import Student
-from .serializers import StudentSerializer, EmpployeeSerializer, ProductSerializer, SaleSerializer
+from .serializers import StudentSerializer, EmpployeeSerializer, ProductSerializer, SaleSerializer, CustomerSerializer, BookSerializer
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.decorators import api_view
 from django.http import Http404
-from rest_framework import mixins, generics
+from rest_framework import mixins, generics, viewsets
 from rest_framework.views import APIView
 
 
@@ -171,3 +173,49 @@ class SaleDetail(generics.RetrieveAPIView, generics.UpdateAPIView, generics.Dest
     lookup_field = 'pk'
 
 
+
+
+################### Viewset ###################
+
+# CustomerViewset class provides methods to list, create, retrieve, update, and delete Customer objects.
+# It is useful for handling customer-related operations through a RESTful API using ViewSets.
+class CustomerViewset(viewsets.ViewSet):
+    def list(self, request):
+        queryset = Customer.objects.all()
+        serializer = CustomerSerializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    def create(self, request):
+        serializer = CustomerSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors)
+    
+    def retrieve(self, request, pk=None):
+        customer = get_object_or_404(Customer, pk=pk)
+        serializer = CustomerSerializer(customer)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def update(self, request, pk=None):
+        customer = get_object_or_404(Customer, pk=pk)
+        serializer = CustomerSerializer(customer, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors)
+    
+    def delete(self, response, pk=None):
+        customer = get_object_or_404(Customer, pk=pk)
+        customer.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+########## ModelViewSet ##########
+
+# BookViewset class extends ModelViewSet to provide complete CRUD operations for Book objects.
+# This class leverages Django REST Framework's ModelViewSet to simplify API view creation for books.
+class BookViewset(viewsets.ModelViewSet):
+    queryset = Book.objects.all()
+    serializer_class = BookSerializer
