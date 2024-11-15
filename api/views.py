@@ -2,6 +2,7 @@ from typing import List
 from django.http import JsonResponse
 from django.shortcuts import render, get_object_or_404
 
+from blogs.models import Blog, Comment
 from books.models import Book
 from customers.models import Customer
 from employees.models import Employee
@@ -15,6 +16,9 @@ from rest_framework.decorators import api_view
 from django.http import Http404
 from rest_framework import mixins, generics, viewsets
 from rest_framework.views import APIView
+
+
+from blogs.serializers import BlogSerializer, CommentSerializer
 
 
 
@@ -219,3 +223,36 @@ class CustomerViewset(viewsets.ViewSet):
 class BookViewset(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+
+
+
+############ Nested Serializers #############
+
+# BlogsView provides a list and create view for Blog objects.
+# It allows clients to create a new blog post or list all available blog posts, showcasing nested relationships with comments.
+class BlogsView(generics.ListCreateAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+
+
+# CommentsView provides a list and create view for Comment objects.
+# It is used to add or list comments, which can be associated with a specific blog post.
+class CommentsView(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+
+
+# BlogDetailView provides retrieve, update, and delete functionality for Blog objects.
+# This view allows clients to retrieve a single blog post, update its details, or delete it.
+class BlogDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+    lookup_field = 'pk'
+
+
+# CommentDetailView provides retrieve, update, and delete functionality for Comment objects.
+# This view is useful to manage individual comments, providing access to retrieve, update, or delete a specific comment.
+class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    lookup_field = 'pk'
