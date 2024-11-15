@@ -29,7 +29,7 @@ The following screenshot shows the response from the /api/v1/comments/ endpoint,
 
 
 
-Books API Endpoint with Filter Capability
+### Books API Endpoint with Filter Capability
 The following screenshot shows the response from the /api/v1/books/ endpoint, which provides a list of all books or allows the creation of new books. This endpoint has pagination and filter capabilities, allowing you to view books page by page and filter by title.
 
 ![Screenshot (224)](https://github.com/user-attachments/assets/c516e831-d711-420a-bc88-0bce86d14ae6)
@@ -37,7 +37,7 @@ The following screenshot shows the response from the /api/v1/books/ endpoint, wh
 
 
 
-Blogs API Endpoint with Search Capability
+### Blogs API Endpoint with Search Capability
 The following screenshot shows the response from the /api/v1/blogs/ endpoint, which provides a list of all blog posts or allows the creation of new posts. This endpoint includes pagination, search, and ordering functionalities to enhance the way blog data can be retrieved.
 
 ![Screenshot (225)](https://github.com/user-attachments/assets/f2c9ddc1-3ef1-4164-979a-a5bade270512)
