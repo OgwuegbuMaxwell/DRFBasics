@@ -16,11 +16,13 @@ from rest_framework.decorators import api_view
 from django.http import Http404
 from rest_framework import mixins, generics, viewsets
 from rest_framework.views import APIView
+from rest_framework.filters import SearchFilter, OrderingFilter
 
 
 from blogs.serializers import BlogSerializer, CommentSerializer
 
-
+from .paginations import CustomPagination
+from books.filters import BookFilter
 
 ######### Function Based Views #########
 
@@ -223,6 +225,17 @@ class CustomerViewset(viewsets.ViewSet):
 class BookViewset(viewsets.ModelViewSet):
     queryset = Book.objects.all()
     serializer_class = BookSerializer
+    
+    # Use custom pagination for book listing
+    pagination_class = CustomPagination
+    
+    # support for filter
+    
+    # usimg gloabal filter
+    # filterset_fields = ['title']
+    
+    # Using custom filter
+    filterset_class = BookFilter
 
 
 
@@ -233,6 +246,9 @@ class BookViewset(viewsets.ModelViewSet):
 class BlogsView(generics.ListCreateAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
+    filter_backends = [SearchFilter, OrderingFilter]
+    search_fields = ['blog_title', 'blog_body']
+    ordering_fields = ['id', 'blog_title']
 
 
 # CommentsView provides a list and create view for Comment objects.
